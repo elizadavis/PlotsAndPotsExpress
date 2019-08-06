@@ -10,7 +10,7 @@ const removeBlanks = require('../../lib/remove_blank_fields')
 const router = express.Router()
 
 router.get('/plots', requireToken, (req, res, next) => {
-  Plot.find()
+  Plot.find({ owner: req.user.id })
     .then(plots => {
       return plots.map(plot => plot.toObject())
     })
@@ -18,12 +18,12 @@ router.get('/plots', requireToken, (req, res, next) => {
     .catch(next)
 })
 
-router.get('/plots/:id', (req, res, next) => {
-  Plot.findById(req.params.id)
-    .then(handle404)
-    .then(plot => res.status(200).json({ plot: plot.toObject() }))
-    .catch(next)
-})
+// router.get('/plots/:id', (req, res, next) => {
+//   Plot.findById(req.params.id)
+//     .then(handle404)
+//     .then(plot => res.status(200).json({ plot: plot.toObject() }))
+//     .catch(next)
+// })
 
 router.delete('/plots/:id', requireToken, (req, res, next) => {
   Plot.findById(req.params.id)

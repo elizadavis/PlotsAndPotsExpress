@@ -10,7 +10,7 @@ const removeBlanks = require('../../lib/remove_blank_fields')
 const router = express.Router()
 
 router.get('/pots', requireToken, (req, res, next) => {
-  Pot.find()
+  Pot.find({ owner: req.user.id })
     .then(pots => {
       return pots.map(pot => pot.toObject())
     })
@@ -18,12 +18,12 @@ router.get('/pots', requireToken, (req, res, next) => {
     .catch(next)
 })
 
-router.get('/pots/:id', (req, res, next) => {
-  Pot.findById(req.params.id)
-    .then(handle404)
-    .then(pot => res.status(200).json({ pot: pot.toObject() }))
-    .catch(next)
-})
+// router.get('/pots/:id', (req, res, next) => {
+//   Pot.findById(req.params.id)
+//     .then(handle404)
+//     .then(pot => res.status(200).json({ pot: pot.toObject() }))
+//     .catch(next)
+// })
 
 router.delete('/pots/:id', requireToken, (req, res, next) => {
   Pot.findById(req.params.id)
